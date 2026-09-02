@@ -156,14 +156,18 @@ function Navbar() {
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
-            className="
+            className={`
               grid h-10 w-10 place-items-center
               rounded-full
               border border-black/10
-              text-[var(--foreground)]
+              ${
+          scrolled
+            ? "text-[var(--muted)] hover:text-[var(--foreground)]"
+            : "text-gray-200 hover:text-white/80 dark:text-white dark:hover:text-white/80"
+        }
               lg:hidden
               dark:border-white/10
-            "
+            `}
           >
             {menuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
