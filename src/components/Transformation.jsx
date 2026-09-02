@@ -1,6 +1,8 @@
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeftRight } from "lucide-react";
+import gallery1 from "../assets/images/Gallery/gallery1.jpg"
+import gallery7 from "../assets/images/Gallery/gallery7.jpg"
 
 function Transformation() {
   const [position, setPosition] = useState(50);
@@ -70,7 +72,7 @@ function Transformation() {
           >
             {/* AFTER IMAGE */}
             <img
-              src="/images/after.jpg"
+              src={gallery1}
               alt="After transformation"
               draggable="false"
               className="absolute inset-0 h-full w-full object-cover"
@@ -82,7 +84,7 @@ function Transformation() {
               style={{ width: `${position}%` }}
             >
               <img
-                src="/images/before.jpg"
+                src={gallery7}
                 alt="Before transformation"
                 draggable="false"
                 className="absolute inset-0 h-full w-full max-w-none object-cover"

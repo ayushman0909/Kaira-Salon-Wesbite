@@ -7,13 +7,21 @@ import {
   X,
 } from "lucide-react";
 
+import gallery1 from "../assets/images/Gallery/gallery1.jpg"
+import gallery2 from "../assets/images/Gallery/gallery2.jpg"
+import gallery3 from "../assets/images/Gallery/gallery3.jpg"
+import gallery4 from "../assets/images/Gallery/gallery4.jpg"
+import gallery5 from "../assets/images/Gallery/gallery5.jpg"
+import gallery6 from "../assets/images/Gallery/gallery6.jpg"
+import gallery7 from "../assets/images/Gallery/gallery7.jpg"
+
 const galleryItems = [
   {
     id: 1,
     title: "Signature Hair",
     category: "Hair",
     image:
-      "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1200&q=85",
+     gallery1,
     className: "md:col-span-5 md:row-span-2",
   },
   {
@@ -21,7 +29,7 @@ const galleryItems = [
     title: "Beauty Details",
     category: "Beauty",
     image:
-      "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1000&q=85",
+      gallery2,
     className: "md:col-span-3",
   },
   {
@@ -29,7 +37,7 @@ const galleryItems = [
     title: "Salon Experience",
     category: "Experience",
     image:
-      "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=1000&q=85",
+      gallery3,
     className: "md:col-span-4",
   },
   {
@@ -37,7 +45,7 @@ const galleryItems = [
     title: "Hair Transformation",
     category: "Hair",
     image:
-      "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=1200&q=85",
+      gallery4,
     className: "md:col-span-4",
   },
   {
@@ -45,7 +53,7 @@ const galleryItems = [
     title: "Modern Styling",
     category: "Styling",
     image:
-      "https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1000&q=85",
+     gallery5,
     className: "md:col-span-3",
   },
   {
@@ -53,7 +61,15 @@ const galleryItems = [
     title: "Beauty Ritual",
     category: "Beauty",
     image:
-      "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1000&q=85",
+      gallery6,
+    className: "md:col-span-5",
+  },
+   {
+    id: 7,
+    title: "Beauty Ritual",
+    category: "Beauty",
+    image:
+      gallery7,
     className: "md:col-span-5",
   },
 ];
@@ -132,7 +148,7 @@ function Gallery() {
                 <img
                   src={item.image}
                   alt={item.title}
-                  className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  className="h-full w-full object-contain transition-transform duration-700 ease-out group-hover:scale-105"
                 />
 
                 {/* Overlay */}
