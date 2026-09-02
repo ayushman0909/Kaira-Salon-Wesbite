@@ -1,10 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  ArrowUpRight,
-  ChevronDown,
-} from "lucide-react";
-
+import { ArrowUpRight, ChevronDown } from "lucide-react";
 import { serviceCategories } from "../data/services";
 
 function Services() {
@@ -22,43 +18,60 @@ function Services() {
       className="
         overflow-hidden
         bg-[var(--surface)]
-        py-24
-        sm:py-32
+        py-16
+        sm:py-24
+        md:py-28
         lg:py-40
       "
     >
-      <div className="mx-auto max-w-7xl px-5 lg:px-8">
-
-        {/* HEADER */}
-
+      <div
+        className="
+          mx-auto
+          w-full
+          max-w-7xl
+          px-4
+          sm:px-6
+          lg:px-8
+        "
+      >
+        {/* ================= HEADER ================= */}
         <div
           className="
-            flex flex-col
-            justify-between
-            gap-8
+            flex
+            flex-col
+            gap-7
             lg:flex-row
             lg:items-end
+            lg:justify-between
+            lg:gap-8
           "
         >
-          <div>
-
+          <div className="w-full">
+            {/* Label */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
               className="
-                flex items-center gap-3
-                text-xs font-medium uppercase
-                tracking-[0.25em]
+                flex
+                items-center
+                gap-2.5
+                text-[10px]
+                font-medium
+                uppercase
+                tracking-[0.2em]
                 text-[var(--accent)]
+                sm:gap-3
+                sm:text-xs
+                sm:tracking-[0.25em]
               "
             >
-              <span className="h-px w-8 bg-[var(--accent)]" />
-
+              <span className="h-px w-6 bg-[var(--accent)] sm:w-8" />
               Our Services
             </motion.div>
 
+            {/* Heading */}
             <motion.h2
               initial={{ opacity: 0, y: 35 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -68,12 +81,13 @@ function Services() {
                 delay: 0.1,
               }}
               className="
-                mt-5
+                mt-4
                 max-w-3xl
                 font-serif
-                text-4xl
-                leading-[1.05]
+                text-[2.35rem]
+                leading-[1.02]
                 tracking-tight
+                sm:mt-5
                 sm:text-5xl
                 md:text-6xl
                 lg:text-7xl
@@ -81,13 +95,13 @@ function Services() {
             >
               Everything you need
               <br />
-              <span className="italic font-light text-[var(--accent)]">
+              <span className="font-light italic text-[var(--accent)]">
                 to feel your best.
               </span>
             </motion.h2>
-
           </div>
 
+          {/* Description */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -97,43 +111,43 @@ function Services() {
               delay: 0.2,
             }}
             className="
+              w-full
               max-w-md
               text-sm
-              leading-7
+              leading-6
               text-[var(--muted)]
               sm:text-base
+              sm:leading-7
+              lg:pb-1
             "
           >
-            From hair transformations to skincare,
-            nails and beauty treatments, discover
-            a complete range of services for both
-            women and men.
+            From hair transformations to skincare, nails and beauty
+            treatments, discover a complete range of services for both women
+            and men.
           </motion.p>
         </div>
 
-        {/* SERVICES MENU */}
-
+        {/* ================= SERVICES ================= */}
         <div
           className="
-            mt-16
+            mt-12
             border-t
             border-black/10
             dark:border-white/10
+            sm:mt-16
             lg:mt-24
           "
         >
-
           <div
             className="
               grid
               lg:grid-cols-[280px_1fr]
             "
           >
-
-            {/* CATEGORY NAV */}
-
+            {/* ================= CATEGORY NAV ================= */}
             <div
               className="
+                min-w-0
                 border-b
                 border-black/10
                 dark:border-white/10
@@ -142,33 +156,45 @@ function Services() {
                 lg:pr-10
               "
             >
-
-              <div className="flex overflow-x-auto lg:block">
-
+              <div
+                className="
+                  flex
+                  w-full
+                  overflow-x-auto
+                  overscroll-x-contain
+                  scrollbar-hide
+                  lg:block
+                  lg:overflow-visible
+                "
+              >
                 {serviceCategories.map((category, index) => {
-                  const isActive =
-                    category.id === activeCategory;
+                  const isActive = category.id === activeCategory;
 
                   return (
                     <button
                       key={category.id}
-                      onClick={() =>
-                        setActiveCategory(category.id)
-                      }
+                      onClick={() => setActiveCategory(category.id)}
                       className={`
                         group
                         relative
                         shrink-0
                         px-1
-                        py-5
-                        pr-8
+                        py-4
+                        pr-7
                         text-left
-                        text-sm
+                        text-xs
                         transition-all
                         duration-300
+
+                        sm:py-5
+                        sm:pr-8
+                        sm:text-sm
+
                         lg:block
                         lg:w-full
                         lg:px-0
+                        lg:py-5
+
                         ${
                           isActive
                             ? "text-[var(--foreground)]"
@@ -176,16 +202,27 @@ function Services() {
                         }
                       `}
                     >
-
-                      <span className="flex items-center justify-between gap-4">
-
+                      <span
+                        className="
+                          flex
+                          items-center
+                          justify-between
+                          gap-3
+                          whitespace-nowrap
+                          lg:gap-4
+                        "
+                      >
                         <span>
-                          {String(index + 1).padStart(2, "0")}
-                          <span className="ml-3">
+                          <span className="text-[10px] sm:text-xs">
+                            {String(index + 1).padStart(2, "0")}
+                          </span>
+
+                          <span className="ml-2 sm:ml-3">
                             {category.title}
                           </span>
                         </span>
 
+                        {/* Desktop arrow */}
                         <ChevronDown
                           size={15}
                           className={`
@@ -200,11 +237,9 @@ function Services() {
                             }
                           `}
                         />
-
                       </span>
 
-                      {/* ACTIVE LINE */}
-
+                      {/* Active indicator */}
                       <span
                         className={`
                           absolute
@@ -214,13 +249,15 @@ function Services() {
                           bg-[var(--accent)]
                           transition-all
                           duration-500
+
                           lg:bottom-auto
                           lg:left-auto
                           lg:right-0
                           lg:top-1/2
-                          lg:-translate-y-1/2
                           lg:h-8
                           lg:w-px
+                          lg:-translate-y-1/2
+
                           ${
                             isActive
                               ? "w-full lg:opacity-100"
@@ -228,20 +265,22 @@ function Services() {
                           }
                         `}
                       />
-
                     </button>
                   );
                 })}
-
               </div>
             </div>
 
-            {/* SERVICE LIST */}
-
-            <div className="min-h-[500px] lg:pl-14">
-
+            {/* ================= SERVICE LIST ================= */}
+            <div
+              className="
+                min-h-0
+                w-full
+                lg:min-h-[500px]
+                lg:pl-14
+              "
+            >
               <AnimatePresence mode="wait">
-
                 <motion.div
                   key={activeService.id}
                   initial={{
@@ -259,28 +298,32 @@ function Services() {
                   transition={{
                     duration: 0.35,
                   }}
-                  className="py-10 lg:py-14"
+                  className="
+                    py-8
+                    sm:py-10
+                    lg:py-14
+                  "
                 >
-
-                  {/* CATEGORY DESCRIPTION */}
-
+                  {/* ================= CATEGORY DESCRIPTION ================= */}
                   <div
                     className="
-                      mb-10
+                      mb-7
                       flex
                       flex-col
                       gap-3
+                      sm:mb-10
                       sm:flex-row
                       sm:items-end
                       sm:justify-between
                     "
                   >
-
                     <h3
                       className="
                         font-serif
-                        text-3xl
-                        sm:text-4xl
+                        text-2xl
+                        leading-tight
+                        sm:text-3xl
+                        md:text-4xl
                       "
                     >
                       {activeService.title}
@@ -288,19 +331,19 @@ function Services() {
 
                     <p
                       className="
+                        w-full
                         max-w-sm
-                        text-sm
+                        text-xs
                         leading-6
                         text-[var(--muted)]
+                        sm:text-sm
                       "
                     >
                       {activeService.description}
                     </p>
-
                   </div>
 
-                  {/* SERVICE ITEMS */}
-
+                  {/* ================= SERVICE ITEMS ================= */}
                   <div
                     className="
                       border-t
@@ -308,93 +351,102 @@ function Services() {
                       dark:border-white/10
                     "
                   >
-                    {activeService.services.map(
-                      (service, index) => (
-                        <motion.div
-                          key={service.name}
-                          initial={{
-                            opacity: 0,
-                            y: 15,
-                          }}
-                          animate={{
-                            opacity: 1,
-                            y: 0,
-                          }}
-                          transition={{
-                            delay: index * 0.045,
-                            duration: 0.35,
-                          }}
+                    {activeService.services.map((service, index) => (
+                      <motion.div
+                        key={service.name}
+                        initial={{
+                          opacity: 0,
+                          y: 15,
+                        }}
+                        animate={{
+                          opacity: 1,
+                          y: 0,
+                        }}
+                        transition={{
+                          delay: index * 0.045,
+                          duration: 0.35,
+                        }}
+                        className="
+                          group
+                          flex
+                          min-w-0
+                          items-center
+                          justify-between
+                          gap-3
+                          border-b
+                          border-black/10
+                          py-4
+                          dark:border-white/10
+                          sm:gap-5
+                          sm:py-6
+                        "
+                      >
+                        {/* Service name */}
+                        <div
                           className="
-                            group
                             flex
+                            min-w-0
                             items-center
-                            justify-between
-                            gap-5
-                            border-b
-                            border-black/10
-                            py-5
-                            dark:border-white/10
-                            sm:py-6
+                            gap-3
+                            sm:gap-4
                           "
                         >
-
-                          <div className="flex items-center gap-4">
-
-                            <span
-                              className="
-                                text-[10px]
-                                text-[var(--muted)]
-                              "
-                            >
-                              {String(index + 1).padStart(
-                                2,
-                                "0"
-                              )}
-                            </span>
-
-                            <span
-                              className="
-                                text-sm
-                                transition-transform
-                                duration-300
-                                group-hover:translate-x-1
-                                sm:text-base
-                              "
-                            >
-                              {service.name}
-                            </span>
-
-                          </div>
+                          <span
+                            className="
+                              shrink-0
+                              text-[9px]
+                              text-[var(--muted)]
+                              sm:text-[10px]
+                            "
+                          >
+                            {String(index + 1).padStart(2, "0")}
+                          </span>
 
                           <span
                             className="
-                              whitespace-nowrap
+                              min-w-0
                               text-xs
-                              text-[var(--accent)]
-                              sm:text-sm
+                              leading-5
+                              transition-transform
+                              duration-300
+                              group-hover:translate-x-1
+                              sm:text-base
                             "
                           >
-                            {service.price}
+                            {service.name}
                           </span>
+                        </div>
 
-                        </motion.div>
-                      )
-                    )}
+                        {/* Price */}
+                        <span
+                          className="
+                            shrink-0
+                            whitespace-nowrap
+                            text-[10px]
+                            text-[var(--accent)]
+                            sm:text-sm
+                          "
+                        >
+                          {service.price}
+                        </span>
+                      </motion.div>
+                    ))}
                   </div>
 
-                  {/* BOOK CTA */}
-
+                  {/* ================= BOOK CTA ================= */}
                   <a
                     href="#booking"
                     className="
                       group
-                      mt-8
+                      mt-7
                       inline-flex
+                      w-full
                       items-center
+                      justify-center
                       gap-3
                       rounded-full
                       bg-[var(--foreground)]
-                      px-6
+                      px-5
                       py-3.5
                       text-xs
                       font-medium
@@ -402,6 +454,10 @@ function Services() {
                       transition-all
                       duration-300
                       hover:gap-5
+
+                      sm:mt-8
+                      sm:w-auto
+                      sm:px-6
                     "
                   >
                     Book a service
@@ -416,15 +472,10 @@ function Services() {
                       "
                     />
                   </a>
-
                 </motion.div>
-
               </AnimatePresence>
-
             </div>
-
           </div>
-
         </div>
       </div>
     </section>

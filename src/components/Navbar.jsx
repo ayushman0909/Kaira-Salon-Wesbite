@@ -110,15 +110,19 @@ function Navbar() {
           <button
             onClick={toggleTheme}
             aria-label="Toggle dark mode"
-            className="
+            className={`
               grid h-10 w-10 place-items-center
               rounded-full
               border border-black/10
-              text-[var(--foreground)]
+              ${
+          scrolled
+            ? "text-[var(--muted)] hover:text-[var(--foreground)]"
+            : "text-gray-200 hover:text-white/80 dark:text-white dark:hover:text-white/80"
+        }
               transition-all duration-300
               hover:border-[var(--accent)]
               dark:border-white/10
-            "
+            `}
           >
             {darkMode ? (
               <Sun size={17} strokeWidth={1.7} />
