@@ -1,162 +1,341 @@
-import { motion } from "framer-motion";
-import { ArrowUpRight, Star } from "lucide-react";
+import { useEffect, useState } from "react";
+import {
+  addDoc,
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  serverTimestamp,
+  where,
+} from "firebase/firestore";
+import { Star } from "lucide-react";
 
-const reviews = [
-  {
-    id: 1,
-    name: "Priya Sharma",
-    service: "Hair Styling",
-    review:
-      "Absolutely loved the experience at Kaira. The team understood exactly what I wanted and the final look was even better than I imagined.",
-  },
-  {
-    id: 2,
-    name: "Neha Kapoor",
-    service: "Facial & Skin Care",
-    review:
-      "The salon has such a beautiful atmosphere. The staff was professional, friendly and very attentive throughout the appointment.",
-  },
-  {
-    id: 3,
-    name: "Riya Mehta",
-    service: "Hair Colour",
-    review:
-      "Finally found a salon where they actually listen before starting. My hair colour came out gorgeous. Highly recommended!",
-  },
-];
+import { db } from "../lib/firebase";
 
 function Reviews() {
+  const [reviews, setReviews] = useState([]);
+
+  const [name, setName] = useState("");
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
+
+  const [submitting, setSubmitting] = useState(false);
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
+
+  // =========================
+  // GET APPROVED REVIEWS
+  // =========================
+
+  useEffect(() => {
+    const reviewsQuery = query(
+      collection(db, "reviews"),
+      where("status", "==", "approved"),
+      orderBy("createdAt", "desc")
+    );
+
+    const unsubscribe = onSnapshot(
+      reviewsQuery,
+      (snapshot) => {
+        const approvedReviews = snapshot.docs.map(
+          (item) => ({
+            id: item.id,
+            ...item.data(),
+          })
+        );
+
+        setReviews(approvedReviews);
+      },
+      (error) => {
+        console.error(
+          "Approved reviews error:",
+          error
+        );
+      }
+    );
+
+    return () => unsubscribe();
+  }, []);
+
+  // =========================
+  // SUBMIT REVIEW
+  // =========================
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    setSuccess("");
+    setError("");
+
+    if (!name.trim()) {
+      setError("Please enter your name.");
+      return;
+    }
+
+    if (rating === 0) {
+      setError("Please select a rating.");
+      return;
+    }
+
+    if (!comment.trim()) {
+      setError("Please write your review.");
+      return;
+    }
+
+    if (comment.trim().length < 10) {
+      setError(
+        "Please write at least 10 characters."
+      );
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+
+      await addDoc(collection(db, "reviews"), {
+        name: name.trim(),
+        rating: Number(rating),
+        comment: comment.trim(),
+        status: "pending",
+        createdAt: serverTimestamp(),
+      });
+
+      setName("");
+      setRating(0);
+      setComment("");
+
+      setSuccess(
+        "Thank you! Your review has been submitted and is awaiting approval."
+      );
+    } catch (error) {
+      console.error(
+        "Review submission error:",
+        error
+      );
+
+      setError(
+        error.message ||
+          "Unable to submit your review."
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <section
       id="reviews"
-      className="bg-[var(--background)] px-5 py-24 md:px-10 lg:px-16 lg:py-32"
+      className="bg-[var(--surface)] px-5 py-20 sm:px-8 lg:px-12 lg:py-28"
     >
       <div className="mx-auto max-w-7xl">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="mb-14 flex flex-col justify-between gap-8 md:flex-row md:items-end"
-        >
-          <div>
-            <span className="mb-4 block text-xs uppercase tracking-[0.3em] text-[var(--accent)]">
-              07 — Reviews
+
+        {/* =========================
+            HEADER
+        ========================= */}
+
+        <div className="mx-auto mb-14 max-w-2xl text-center">
+          <p className="mb-3 text-xs uppercase tracking-[0.3em] text-[var(--accent)]">
+            Client Stories
+          </p>
+
+          <h2 className="font-serif text-4xl leading-tight sm:text-5xl lg:text-6xl">
+            Loved by our
+            <span className="italic">
+              {" "}clients.
             </span>
+          </h2>
 
-            <h2 className="max-w-3xl font-serif text-4xl leading-[1.05] tracking-tight text-[var(--foreground)] md:text-6xl lg:text-7xl">
-              Loved by
-              <span className="ml-2 italic">our clients.</span>
-            </h2>
-          </div>
-
-          <div className="md:text-right">
-            <div className="flex items-center gap-2 md:justify-end">
-              <span className="font-serif text-4xl text-[var(--foreground)]">
-                5.0
-              </span>
-
-              <div>
-                <div className="flex gap-1">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star
-                      key={star}
-                      size={13}
-                      fill="currentColor"
-                      className="text-[var(--accent)]"
-                    />
-                  ))}
-                </div>
-
-                <p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-[var(--muted)]">
-                  Client experience
-                </p>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Reviews */}
-        <div className="grid gap-px overflow-hidden border border-[var(--border)] bg-[var(--border)] md:grid-cols-3">
-          {reviews.map((review, index) => (
-            <motion.article
-              key={review.id}
-              initial={{ opacity: 0, y: 35 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{
-                duration: 0.6,
-                delay: index * 0.1,
-              }}
-              className="group bg-[var(--background)] p-7 transition-colors duration-500 hover:bg-[var(--surface)] md:p-9"
-            >
-              {/* Number */}
-              <div className="mb-12 flex items-center justify-between">
-                <span className="text-[10px] uppercase tracking-[0.25em] text-[var(--muted)]">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-
-                <div className="flex gap-1">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star
-                      key={star}
-                      size={12}
-                      fill="currentColor"
-                      className="text-[var(--accent)]"
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* Quote */}
-              <blockquote className="min-h-[180px] font-serif text-xl leading-relaxed text-[var(--foreground)] md:text-2xl">
-                "{review.review}"
-              </blockquote>
-
-              {/* Client */}
-              <div className="mt-8 border-t border-[var(--border)] pt-5">
-                <p className="text-sm font-medium text-[var(--foreground)]">
-                  {review.name}
-                </p>
-
-                <p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-[var(--muted)]">
-                  {review.service}
-                </p>
-              </div>
-            </motion.article>
-          ))}
+          <p className="mt-5 text-sm leading-7 text-[var(--muted)] sm:text-base">
+            Real experiences from our beautiful
+            clients.
+          </p>
         </div>
 
-        {/* Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className="mt-10 flex flex-col justify-between gap-6 border-t border-[var(--border)] pt-7 sm:flex-row sm:items-center"
-        >
-          <div>
-            <p className="font-serif text-2xl text-[var(--foreground)]">
-              Had a Kaira experience?
-            </p>
+        {/* =========================
+            APPROVED REVIEWS
+        ========================= */}
 
-            <p className="mt-1 text-sm text-[var(--muted)]">
-              We'd love to hear about it.
+        {reviews.length > 0 && (
+          <div className="mb-20 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {reviews.map((review) => (
+              <article
+                key={review.id}
+                className="rounded-2xl border border-[var(--border)] bg-[var(--background)] p-6 transition duration-300 hover:-translate-y-1"
+              >
+                {/* STARS */}
+
+                <div className="flex gap-1 text-[var(--accent)]">
+                  {Array.from({
+                    length: 5,
+                  }).map((_, index) => (
+                    <Star
+                      key={index}
+                      size={16}
+                      fill={
+                        index <
+                        Number(review.rating || 0)
+                          ? "currentColor"
+                          : "none"
+                      }
+                    />
+                  ))}
+                </div>
+
+                {/* REVIEW */}
+
+                <p className="mt-5 text-sm leading-7 text-[var(--muted)]">
+                  "{review.comment}"
+                </p>
+
+                {/* NAME */}
+
+                <div className="mt-6 border-t border-[var(--border)] pt-4">
+                  <p className="text-sm font-medium">
+                    {review.name}
+                  </p>
+
+                  <p className="mt-1 text-[10px] uppercase tracking-[0.18em] text-[var(--accent)]">
+                    Verified Client
+                  </p>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
+
+        {/* =========================
+            REVIEW FORM
+        ========================= */}
+
+        <div className="mx-auto max-w-2xl rounded-3xl border border-[var(--border)] bg-[var(--background)] p-5 sm:p-8 lg:p-10">
+          <div className="mb-7">
+            <h3 className="font-serif text-3xl">
+              Share your experience
+            </h3>
+
+            <p className="mt-2 text-sm text-[var(--muted)]">
+              We'd love to hear about your visit.
             </p>
           </div>
 
-          <a
-            href="#booking"
-            className="group inline-flex items-center gap-3 self-start text-sm font-medium text-[var(--foreground)]"
-          >
-            Share your experience
+          <form onSubmit={handleSubmit}>
 
-            <span className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border)] transition-all duration-300 group-hover:border-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-white">
-              <ArrowUpRight size={15} />
-            </span>
-          </a>
-        </motion.div>
+            {/* NAME */}
+
+            <div>
+              <label
+                htmlFor="review-name"
+                className="mb-2 block text-xs font-medium uppercase tracking-[0.15em]"
+              >
+                Your Name
+              </label>
+
+              <input
+                id="review-name"
+                type="text"
+                value={name}
+                onChange={(event) =>
+                  setName(event.target.value)
+                }
+                placeholder="Enter your name"
+                maxLength={60}
+                className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3.5 text-sm outline-none transition focus:border-[var(--accent)]"
+              />
+            </div>
+
+            {/* RATING */}
+
+            <div className="mt-6">
+              <label className="mb-3 block text-xs font-medium uppercase tracking-[0.15em]">
+                Your Rating
+              </label>
+
+              <div className="flex gap-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    type="button"
+                    onClick={() => setRating(star)}
+                    className="transition-transform hover:scale-110"
+                  >
+                    <Star
+                      size={28}
+                      fill={
+                        star <= rating
+                          ? "currentColor"
+                          : "none"
+                      }
+                      className={
+                        star <= rating
+                          ? "text-[var(--accent)]"
+                          : "text-[var(--muted)]"
+                      }
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* COMMENT */}
+
+            <div className="mt-6">
+              <label
+                htmlFor="review-comment"
+                className="mb-2 block text-xs font-medium uppercase tracking-[0.15em]"
+              >
+                Your Review
+              </label>
+
+              <textarea
+                id="review-comment"
+                value={comment}
+                onChange={(event) =>
+                  setComment(event.target.value)
+                }
+                placeholder="Tell us about your experience..."
+                maxLength={500}
+                rows={5}
+                className="w-full resize-none rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3.5 text-sm leading-6 outline-none transition focus:border-[var(--accent)]"
+              />
+
+              <p className="mt-2 text-right text-[11px] text-[var(--muted)]">
+                {comment.length}/500
+              </p>
+            </div>
+
+            {/* ERROR */}
+
+            {error && (
+              <div className="mt-5 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-500">
+                {error}
+              </div>
+            )}
+
+            {/* SUCCESS */}
+
+            {success && (
+              <div className="mt-5 rounded-xl border border-green-500/20 bg-green-500/10 px-4 py-3 text-sm leading-6 text-green-600">
+                {success}
+              </div>
+            )}
+
+            {/* SUBMIT */}
+
+            <button
+              type="submit"
+              disabled={submitting}
+              className="mt-6 w-full rounded-xl bg-[var(--foreground)] px-6 py-4 text-sm font-medium text-[var(--background)] transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {submitting
+                ? "Submitting..."
+                : "Submit Review"}
+            </button>
+
+            <p className="mt-4 text-center text-[11px] text-[var(--muted)]">
+              Reviews are published after approval.
+            </p>
+          </form>
+        </div>
       </div>
     </section>
   );

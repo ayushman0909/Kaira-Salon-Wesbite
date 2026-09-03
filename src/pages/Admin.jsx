@@ -1,29 +1,47 @@
+import { useEffect, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { Outlet } from "react-router-dom";
+
+import { auth } from "../lib/firebase";
+
+import Login from "../admin/Login";
+import AdminLayout from "../admin/AdminLayout";
+
 function Admin() {
-  return (
-    <div className="admin-page">
-      <h1>Kaira Admin Panel</h1>
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-      <p>
-        Manage your salon website from one place.
-      </p>
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setLoading(false);
+    });
 
-      <div className="admin-grid">
-        <div className="admin-card">
-          <h2>Gallery</h2>
-          <p>Add or remove salon photos and videos.</p>
-        </div>
+    return () => unsubscribe();
+  }, []);
 
-        <div className="admin-card">
-          <h2>Services</h2>
-          <p>Update services, categories and prices.</p>
-        </div>
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[var(--background)] text-[var(--foreground)]">
+        <div className="text-center">
+          <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-2 border-[var(--border)] border-t-[var(--accent)]" />
 
-        <div className="admin-card">
-          <h2>Reviews</h2>
-          <p>Approve or decline customer reviews.</p>
+          <p className="text-sm text-[var(--muted)]">
+            Loading admin...
+          </p>
         </div>
       </div>
-    </div>
+    );
+  }
+
+  if (!user) {
+    return <Login />;
+  }
+
+  return (
+    <AdminLayout>
+      <Outlet />
+    </AdminLayout>
   );
 }
 

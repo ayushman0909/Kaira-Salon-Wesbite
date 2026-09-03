@@ -100,10 +100,10 @@ function Location() {
                 </span>
 
                 <a
-                  href="tel:+919999999999"
+                  href="tel:+919278678662"
                   className="mt-3 block font-serif text-xl text-[var(--foreground)] transition-colors hover:text-[var(--accent)]"
                 >
-                  +91 XXXXX XXXXX
+                  +919278678662
                 </a>
               </div>
             </div>

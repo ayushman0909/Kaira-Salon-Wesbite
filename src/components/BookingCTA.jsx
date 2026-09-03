@@ -58,7 +58,7 @@ function BookingCTA() {
             </p>
 
             <a
-              href="https://wa.me/919999999999"
+              href="https://wa.me/919278678662"
               target="_blank"
               rel="noreferrer"
               className="group mt-7 rounded-3xl inline-flex items-center gap-3 bg-[var(--accent)] px-6 py-4 text-sm font-medium text-white transition-transform duration-300 hover:-translate-y-1"
@@ -83,7 +83,7 @@ function BookingCTA() {
         >
           {/* Appointment */}
           <a
-            href="https://wa.me/919999999999"
+            href="https://wa.me/919278678662"
             target="_blank"
             rel="noreferrer"
             className="group border-b border-[var(--background)]/10 p-6 transition-colors hover:bg-[var(--background)]/5 sm:border-b-0 sm:border-r"
@@ -105,7 +105,7 @@ function BookingCTA() {
 
           {/* WhatsApp */}
           <a
-            href="https://wa.me/919999999999"
+            href="https://wa.me/919278678662"
             target="_blank"
             rel="noreferrer"
             className="group border-b border-[var(--background)]/10 p-6 transition-colors hover:bg-[var(--background)]/5 sm:border-b-0 sm:border-r"
@@ -127,7 +127,7 @@ function BookingCTA() {
 
           {/* Phone */}
           <a
-            href="tel:+919999999999"
+            href="tel:+919278678662"
             className="group p-6 transition-colors hover:bg-[var(--background)]/5"
           >
             <Phone

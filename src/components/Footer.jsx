@@ -5,7 +5,7 @@ import {
   MapPin,
   Phone,
 } from "lucide-react";
-import { FaInstagram ,FaFacebook } from "react-icons/fa";
+import { FaInstagram ,FaFacebook ,FaYoutube} from "react-icons/fa";
 
 const serviceLinks = [
   "Hair",
@@ -49,7 +49,7 @@ function Footer() {
             {/* Social */}
             <div className="mt-8 flex gap-3">
               <a
-                href="#"
+                href="https://www.instagram.com/kaira_unisex_salon"
                 aria-label="FaInstagram"
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--background)]/15 transition-all duration-300 hover:border-[var(--accent)] hover:bg-[var(--accent)]"
               >
@@ -62,6 +62,13 @@ function Footer() {
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--background)]/15 transition-all duration-300 hover:border-[var(--accent)] hover:bg-[var(--accent)]"
               >
                 <FaFacebook size={16} strokeWidth={1.5} />
+              </a>
+              <a
+                href="https://www.youtube.com/@Kairaunisexsalon"
+                aria-label="FaYoutube"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--background)]/15 transition-all duration-300 hover:border-[var(--accent)] hover:bg-[var(--accent)]"
+              >
+                <FaYoutube size={16} strokeWidth={1.5} />
               </a>
             </div>
           </div>
@@ -128,7 +135,7 @@ function Footer() {
               </div>
 
               <a
-                href="tel:+919999999999"
+                href="tel:+919278678662"
                 className="flex items-center gap-3 text-sm text-[var(--background)]/60 transition-colors hover:text-[var(--background)]"
               >
                 <Phone
@@ -137,7 +144,7 @@ function Footer() {
                   className="text-[var(--accent)]"
                 />
 
-                +91 XXXXX XXXXX
+                +91 9278678662
               </a>
             </div>
           </div>
