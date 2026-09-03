@@ -24,13 +24,16 @@ import {
 
 const categories = [
   "Hair",
-  "Skin & Facials",
-  "Nails",
-  "Brows & Lashes",
-  "Waxing",
-  "Makeup & Bridal",
-  "Braids",
-  "Wellness",
+  "Facials",
+  "Cleanup",
+  "Normal Wax",
+  "Milk Wax",
+  "Rica Wax",
+  "Aloe Vera Wax",
+  "Brazilian Wax",
+  "Body Polishing",
+  "Pedicure",
+  "Manicure",
 ];
 
 const emptyForm = {
