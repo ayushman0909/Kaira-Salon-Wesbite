@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   Image,
@@ -6,29 +7,133 @@ import {
   CalendarCheck,
 } from "lucide-react";
 
+import {
+  collection,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
+
+import { db } from "../lib/firebase";
+
 function Dashboard() {
+  const [galleryCount, setGalleryCount] = useState(0);
+  const [servicesCount, setServicesCount] = useState(0);
+  const [reviewsCount, setReviewsCount] = useState(0);
+  const [bookingsCount, setBookingsCount] = useState(0);
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let loaded = 0;
+
+    const checkLoading = () => {
+      loaded += 1;
+
+      if (loaded === 4) {
+        setLoading(false);
+      }
+    };
+
+    // =========================
+    // GALLERY COUNT
+    // =========================
+    const unsubscribeGallery = onSnapshot(
+      collection(db, "gallery"),
+      (snapshot) => {
+        setGalleryCount(snapshot.size);
+        checkLoading();
+      },
+      (error) => {
+        console.error("Gallery count error:", error);
+        checkLoading();
+      }
+    );
+
+    // =========================
+    // SERVICES COUNT
+    // =========================
+    const unsubscribeServices = onSnapshot(
+      collection(db, "services"),
+      (snapshot) => {
+        setServicesCount(snapshot.size);
+        checkLoading();
+      },
+      (error) => {
+        console.error("Services count error:", error);
+        checkLoading();
+      }
+    );
+
+    // =========================
+    // APPROVED REVIEWS COUNT
+    // =========================
+    const reviewsQuery = query(
+      collection(db, "reviews"),
+      where("status", "==", "approved")
+    );
+
+    const unsubscribeReviews = onSnapshot(
+      reviewsQuery,
+      (snapshot) => {
+        setReviewsCount(snapshot.size);
+        checkLoading();
+      },
+      (error) => {
+        console.error("Reviews count error:", error);
+        checkLoading();
+      }
+    );
+
+    // =========================
+    // BOOKINGS COUNT
+    // =========================
+    const unsubscribeBookings = onSnapshot(
+      collection(db, "bookings"),
+      (snapshot) => {
+        setBookingsCount(snapshot.size);
+        checkLoading();
+      },
+      (error) => {
+        console.error("Bookings count error:", error);
+
+        // If bookings collection doesn't exist yet,
+        // keep the count at 0.
+        setBookingsCount(0);
+        checkLoading();
+      }
+    );
+
+    return () => {
+      unsubscribeGallery();
+      unsubscribeServices();
+      unsubscribeReviews();
+      unsubscribeBookings();
+    };
+  }, []);
+
   const stats = [
     {
       title: "Gallery",
-      value: "0",
+      value: loading ? "..." : galleryCount,
       icon: Image,
       description: "Published images",
     },
     {
       title: "Services",
-      value: "0",
+      value: loading ? "..." : servicesCount,
       icon: Scissors,
       description: "Active services",
     },
     {
       title: "Reviews",
-      value: "0",
+      value: loading ? "..." : reviewsCount,
       icon: Star,
       description: "Approved reviews",
     },
     {
       title: "Bookings",
-      value: "0",
+      value: loading ? "..." : bookingsCount,
       icon: CalendarCheck,
       description: "Total bookings",
     },
@@ -36,6 +141,7 @@ function Dashboard() {
 
   return (
     <div>
+      {/* HEADER */}
       <div className="mb-8">
         <p className="mb-2 text-xs uppercase tracking-[0.25em] text-[var(--accent)]">
           Overview
@@ -50,6 +156,7 @@ function Dashboard() {
         </p>
       </div>
 
+      {/* STATS */}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {stats.map((stat, index) => {
           const Icon = stat.icon;
@@ -76,7 +183,7 @@ function Dashboard() {
                 </div>
 
                 <span className="text-xs text-[var(--muted)]">
-                  01
+                  {String(index + 1).padStart(2, "0")}
                 </span>
               </div>
 
@@ -96,6 +203,7 @@ function Dashboard() {
         })}
       </div>
 
+      {/* WELCOME */}
       <div className="mt-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
         <h2 className="font-serif text-2xl">
           Welcome to Kaira Admin
