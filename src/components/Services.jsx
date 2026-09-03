@@ -10,7 +10,12 @@ import {
 
 import { db } from "../lib/firebase";
 
-// Keep the same category order and descriptions as your existing UI.
+/* ============================================================
+   FIRESTORE CATEGORY CONFIG
+   These names MUST exactly match the category values
+   stored in Firestore.
+============================================================ */
+
 const categoryConfig = [
   {
     id: "hair",
@@ -20,67 +25,101 @@ const categoryConfig = [
     firestoreCategory: "Hair",
   },
   {
-    id: "skin-facials",
-    title: "Skin & Facials",
+    id: "facials",
+    title: "Facials",
     description:
-      "Professional skincare and facial treatments designed to refresh, nourish and restore your skin.",
-    firestoreCategory: "Skin & Facials",
+      "Professional facial treatments designed to refresh, nourish and restore your skin.",
+    firestoreCategory: "Facials",
   },
   {
-    id: "nails",
-    title: "Nails",
+    id: "cleanup",
+    title: "Cleanup",
     description:
-      "Beautifully finished manicures, pedicures and nail services for perfectly polished hands and feet.",
-    firestoreCategory: "Nails",
+      "Gentle and effective cleanup treatments to refresh your skin and leave it feeling clean and renewed.",
+    firestoreCategory: "Cleanup",
   },
   {
-    id: "brows-lashes",
-    title: "Brows & Lashes",
+    id: "normal-wax",
+    title: "Normal Wax",
     description:
-      "Enhance your natural beauty with expertly shaped brows, threading, microblading and lash treatments.",
-    firestoreCategory: "Brows & Lashes",
+      "Professional waxing treatments for smooth, clean and comfortable skin.",
+    firestoreCategory: "Normal Wax",
   },
   {
-    id: "waxing",
-    title: "Waxing",
+    id: "milk-wax",
+    title: "Milk Wax",
     description:
-      "Smooth, comfortable waxing treatments with professional care and attention to detail.",
-    firestoreCategory: "Waxing",
+      "Gentle milk wax treatments designed for effective hair removal with a smoother finish.",
+    firestoreCategory: "Milk Wax",
   },
   {
-    id: "makeup-bridal",
-    title: "Makeup & Bridal",
+    id: "rica-wax",
+    title: "Rica Wax",
     description:
-      "From everyday glam to bridal transformations, get a flawless look for every special occasion.",
-    firestoreCategory: "Makeup & Bridal",
+      "Premium Rica waxing treatments for a smooth and comfortable salon experience.",
+    firestoreCategory: "Rica Wax",
   },
   {
-    id: "braids",
-    title: "Braids",
+    id: "aloe-vera-wax",
+    title: "Aloe Vera Wax",
     description:
-      "Creative braiding styles crafted with precision, from classic looks to modern protective styles.",
-    firestoreCategory: "Braids",
+      "Soothing aloe vera wax treatments that provide effective hair removal with a gentle finish.",
+    firestoreCategory: "Aloe Vera Wax",
   },
   {
-    id: "wellness",
-    title: "Wellness",
+    id: "brazilian-wax",
+    title: "Brazilian Wax",
     description:
-      "Relaxing beauty and wellness experiences created to help you unwind and feel your best.",
-    firestoreCategory: "Wellness",
+      "Professional waxing services performed with care, precision and attention to detail.",
+    firestoreCategory: "Brazilian Wax",
+  },
+  {
+    id: "body-polishing",
+    title: "Body Polishing",
+    description:
+      "Luxurious body polishing treatments designed to exfoliate, nourish and rejuvenate your skin.",
+    firestoreCategory: "Body Polishing",
+  },
+  {
+    id: "pedicure",
+    title: "Pedicure",
+    description:
+      "Relaxing pedicure treatments for clean, refreshed and beautifully finished feet.",
+    firestoreCategory: "Pedicure",
+  },
+  {
+    id: "manicure",
+    title: "Manicure",
+    description:
+      "Professional manicure treatments for beautifully groomed, polished and healthy-looking hands.",
+    firestoreCategory: "Manicure",
+  },
+  {
+    id: "Package",
+    title: "Package",
+    description:
+      "Get Your Full Body Service with UsComplete Beauty Package – Waxing + Facial + Manicure + Pedicure + Body Polishing for a head-to-toe glow.",
+    firestoreCategory: "Package",
   },
 ];
 
+/* ============================================================
+   SERVICES COMPONENT
+============================================================ */
+
 function Services() {
   const [services, setServices] = useState([]);
+
   const [activeCategory, setActiveCategory] = useState(
     categoryConfig[0].id
   );
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // ============================================================
-  // FIRESTORE SERVICES
-  // ============================================================
+  /* ==========================================================
+     FIRESTORE SERVICES
+  ========================================================== */
 
   useEffect(() => {
     const servicesQuery = query(
@@ -96,14 +135,22 @@ function Services() {
           ...doc.data(),
         }));
 
+        console.log(
+          "Kaira Salon services loaded:",
+          firebaseServices
+        );
+
         setServices(firebaseServices);
         setLoading(false);
         setError("");
       },
       (err) => {
-        console.error("Services error:", err);
+        console.error("Services Firestore error:", err);
 
-        setError("Unable to load services.");
+        setError(
+          err?.message || "Unable to load services."
+        );
+
         setLoading(false);
       }
     );
@@ -111,24 +158,34 @@ function Services() {
     return () => unsubscribe();
   }, []);
 
-  // ============================================================
-  // BUILD SAME CATEGORY STRUCTURE AS OLD services.js
-  // ============================================================
+  /* ==========================================================
+     BUILD CATEGORY STRUCTURE
+  ========================================================== */
 
   const serviceCategories = useMemo(() => {
     return categoryConfig.map((category) => ({
       ...category,
 
       services: services.filter(
-        (service) => service.category === category.firestoreCategory
+        (service) =>
+          String(service.category || "").trim() ===
+          category.firestoreCategory
       ),
     }));
   }, [services]);
+
+  /* ==========================================================
+     ACTIVE CATEGORY
+  ========================================================== */
 
   const activeService =
     serviceCategories.find(
       (category) => category.id === activeCategory
     ) || serviceCategories[0];
+
+  /* ==========================================================
+     UI
+  ========================================================== */
 
   return (
     <section
@@ -244,8 +301,8 @@ function Services() {
             "
           >
             From hair transformations to skincare, nails and beauty
-            treatments, discover a complete range of services for both women
-            and men.
+            treatments, discover a complete range of services for both
+            women and men.
           </motion.p>
         </div>
 
@@ -440,6 +497,8 @@ function Services() {
                     min-h-[400px]
                     items-center
                     justify-center
+                    px-4
+                    text-center
                     text-sm
                     text-[var(--muted)]
                   "
@@ -449,7 +508,7 @@ function Services() {
               ) : (
                 <AnimatePresence mode="wait">
                   <motion.div
-                    key={activeService.id}
+                    key={activeService?.id}
                     initial={{
                       opacity: 0,
                       y: 20,
@@ -494,7 +553,7 @@ function Services() {
                           md:text-4xl
                         "
                       >
-                        {activeService.title}
+                        {activeService?.title}
                       </h3>
 
                       <p
@@ -507,7 +566,7 @@ function Services() {
                           sm:text-sm
                         "
                       >
-                        {activeService.description}
+                        {activeService?.description}
                       </p>
                     </div>
 
@@ -520,7 +579,7 @@ function Services() {
                         dark:border-white/10
                       "
                     >
-                      {activeService.services.length > 0 ? (
+                      {activeService?.services?.length > 0 ? (
                         activeService.services.map(
                           (service, index) => (
                             <motion.div

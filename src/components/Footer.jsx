@@ -57,7 +57,7 @@ function Footer() {
               </a>
 
               <a
-                href="#"
+                href="https://www.facebook.com/share/1JqbqNRgsE/"
                 aria-label="FaFacebook"
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--background)]/15 transition-all duration-300 hover:border-[var(--accent)] hover:bg-[var(--accent)]"
               >
