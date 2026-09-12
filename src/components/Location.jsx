@@ -181,7 +181,7 @@ function Location() {
             </span>
 
             <p className="mt-2 text-sm text-[var(--foreground)]">
-              new Delhi 110027
+              New Delhi 110027
             </p>
           </div>
 
