@@ -171,7 +171,7 @@ function Location() {
             </span>
 
             <p className="mt-2 text-sm text-[var(--foreground)]">
-              Opposite Subhash Nagar
+              3/211 subhash nagar 
             </p>
           </div>
 
@@ -181,7 +181,7 @@ function Location() {
             </span>
 
             <p className="mt-2 text-sm text-[var(--foreground)]">
-              Milap Nagar, New Delhi
+              new Delhi 110027
             </p>
           </div>
 
