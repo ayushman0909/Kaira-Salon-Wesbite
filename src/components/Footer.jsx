@@ -126,9 +126,7 @@ function Footer() {
                 />
 
                 <p className="text-sm leading-6 text-[var(--background)]/60">
-                  Milap Market, J 45,
-                  <br />
-                  Opposite Subhash Nagar,
+                  3/211 subhash nagar 
                   <br />
                   New Delhi — 110027
                 </p>

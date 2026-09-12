@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 
 const address =
-  "Milap Market, J 45, Opposite Subhash Nagar, Block J, Beri Wala Bagh, Milap Nagar, New Delhi, Delhi 110027";
+  "28.6347152, 77.1114964";
 
 const mapQuery = encodeURIComponent(address);
 
@@ -61,7 +61,7 @@ function Location() {
                 </span>
 
                 <p className="mt-3 max-w-sm font-serif text-xl leading-relaxed text-[var(--foreground)]">
-                  {address}
+                  3/211 subhash nagar new Delhi 110027
                 </p>
               </div>
 
